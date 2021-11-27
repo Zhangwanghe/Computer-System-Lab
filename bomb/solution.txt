@@ -1,0 +1,31 @@
+1、Border relations with Canada have never been better. （完全匹配，包括标点 基础）
+2、1 2 4 8 16 32 （第一个数为1，每个数是前一个的2倍 考察循环）
+3、0 207 （1 311; 2 707; 3 256; 4 389; 5 206; 6 682; 7 327 考察switch）
+4、0 0（1 0; 3 0; 7 0 考察递归）
+5、ionefg
+考察dowhile，后缀为9FE567的字符即可
+代码大致为：
+char src[] = maduiersnfotvbylSo you think you can stop the bomb with ctrl-c, do you;
+char dest[] = "flyers";
+
+if(strlen(input) == 6) {
+	char buffer[6];
+	int i = 0;
+	do {
+		char ch = input[i];
+		buffer[i] = s[ch & 0xF];
+	} while (i != 6)
+	
+	if (buffer == dest) {
+		return;
+	}
+} 
+bomb;
+6.4 3 2 1 6 5
+考察复杂逻辑
+首先注意有全局链表，该立案表中的节点是一个数组中的元素。
+（1）输入6个不重复 <= 6 的数字，
+（2）将每个数设置为7的补数。
+（3）根据（2）中的结果，根据每个数值，确定寻址下一个元素的次数，并将最终得到的链表节点地址保存在栈上。
+（4）将链表设置为循环链表
+（5）判断从栈上保存的第一个链表地址访问链表，其元素是否按从大到小的顺序排列。

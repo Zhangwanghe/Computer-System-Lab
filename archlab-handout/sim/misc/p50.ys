@@ -1,0 +1,66 @@
+    .pos 0
+    irmovq stack, %rsp
+    call main
+    halt
+
+.align 8
+addr:
+    .quad 0x0eb
+    .quad 0x124
+    .quad 0x0fe
+    .quad 0x111
+    .quad 0x124
+    .quad 0x0fe
+
+main:
+    irmovq $8, %r8      # CNT =  
+    irmovq $8, %r13     # sizeof(long)
+    irmovq $-1, %r9  
+    irmovq $72, %r10
+    subq %r10, %rsp
+    rrmovq %rsp, %r14
+    xorq %r11, %r11     # i = 0
+    jmp test
+loop:
+    rrmovq %r11, %rdi 
+    addq %r9, %rdi      # i + MINVAL
+    call switchv
+    addq %r13, %r14     # rsp += 8
+    rmmovq %rax, (%r14) # vals[i] = ret
+    subq %r9, %r11      # i++
+test:
+    rrmovq %r8, %r12 
+    subq %r11, %r12     # CNT - i
+    jg loop
+    ret
+switchv:
+    irmovq $5, %rdx
+    andq %rdi, %rdi
+    jl L4
+    subq %rdx, %rdi
+    jg L4
+    addq %rdx, %rdi
+    addq %rdi, %rdi
+    addq %rdi, %rdi
+    addq %rdi, %rdi
+    rrmovq %rdi, %rax
+    irmovq addr, %rsi
+    addq %rdi, %rsi
+    mrmovq (%rsi), %rsi
+    pushq %rsi
+    ret
+L1:
+    irmovq $0xaaa, %rax
+    jmp L5
+L2:
+    irmovq $0xbbb, %rax
+    jmp L5
+L3:
+    irmovq $0xccc, %rax
+    jmp L5
+L4:
+    irmovq $0xddd, %rax 
+L5:
+    ret
+.pos 0x300
+stack:

@@ -1,0 +1,65 @@
+    .pos 0
+    irmovq stack, %rsp
+    call main
+    halt
+
+.align 8
+# Source block
+arr:
+    .quad 0x00a
+    .quad 0x003
+    .quad 0x005
+    .quad 0x00d
+    .quad 0x007
+
+main:
+    irmovq arr, %rdi
+    irmovq $5, %rsi
+    call bubble_a
+    ret
+
+bubble_a:
+    irmovq $1, %r8
+    irmovq $8, %r9
+    rrmovq %rsi, %r10
+    subq %r8, %r10
+    xorq %rdx, %rdx
+    xorq %rax, %rax
+    jmp test1
+loop1:
+    xorq %r11, %r11
+    jmp test2
+loop2:
+    addq %r8, %rdx
+    rrmovq %r11, %r12
+    addq %r12, %r12
+    addq %r12, %r12
+    addq %r12, %r12
+    addq %rdi, %r12
+    rrmovq %r12, %r13
+    addq %r9, %r13
+    mrmovq (%r12), %rbx
+    mrmovq (%r13), %rcx
+    rrmovq %rcx, %r14
+    addq %r8, %r11
+    xorq %rdx, %rdx
+    subq %rbx, %r14
+    cmovle %r14, %rdx
+    addq %rdx, %rbx
+    subq %rdx, %rcx
+    rmmovq %rbx, (%r12)
+    rmmovq %rcx, (%r13)
+test2:
+    rrmovq %r11, %r12
+    addq %r8, %rax
+    subq %r10, %r12
+    jl loop2
+    subq %r8, %r10
+test1:
+    rrmovq %r10, %r11
+    andq %r11, %r11
+    jg loop1
+    ret
+
+.pos 0x200
+stack:
