@@ -369,6 +369,8 @@ void do_bgfg(char **argv)
     job->state = strcmp(argv[0], "fg") == 0 ? FG : BG;
     Sigprocmask(SIG_SETMASK, &prev, NULL);
 
+    Kill(-job->pid, SIGCONT);
+    
     if (job->state == BG)
     {
         printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
@@ -378,7 +380,7 @@ void do_bgfg(char **argv)
         waitfg(job->pid);
     }
 
-    Kill(job->pid, SIGCONT);
+    
     return;
 }
 
@@ -472,7 +474,7 @@ void sigint_handler(int sig)
     pid = fgpid(jobs);
     Sigprocmask(SIG_SETMASK, &prev, NULL);
 
-    Kill(pid, SIGINT);
+    Kill(-pid, SIGINT);
 
     errno = old_errno;
     return;
@@ -496,7 +498,7 @@ void sigtstp_handler(int sig)
 
     if (pid != 0)
     {
-        Kill(pid, SIGTSTP);
+        Kill(-pid, SIGTSTP);
     }
 
     errno = old_errno;
