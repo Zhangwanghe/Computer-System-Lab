@@ -95,7 +95,7 @@ void Execve(const char *filename, char *const argv[], char *const envp[]);
 pid_t Fork(void);
 void Setpgid(pid_t pid, pid_t gid);
 void Kill(pid_t pid, int sig);
-ssize_t sio_puts(char s[]); // todo
+ssize_t Sio_puts(char s[]);
 
 /*
  * main - The shell's main routine 
@@ -204,6 +204,7 @@ void eval(char *cmdline)
 
         if ((pid = Fork()) == 0)
         {
+            // set pgid to pid
             Setpgid(0, 0);
             Sigprocmask(SIG_SETMASK, &prev, NULL);
             if (execve(argv[0], argv, NULL) < 0)
@@ -213,6 +214,7 @@ void eval(char *cmdline)
             }
         }
 
+        // add a job and return if failed
         int jid = 0;
         int result = 0;
         Sigprocmask(SIG_BLOCK, &mask_all, NULL);
@@ -225,6 +227,7 @@ void eval(char *cmdline)
             return;
         }
 
+        // wait for foreground job and print message for background job
         if (bg)
         {
             printf("[%d] (%d) %s", jid, pid, buffer);
@@ -338,7 +341,7 @@ void do_bgfg(char **argv)
         return;
     }
 
-    //get pid
+    // parse jid and pid to get job
     struct job_t *job;
     if (argv[1][0] == '%')
     {
@@ -366,13 +369,14 @@ void do_bgfg(char **argv)
         }
     }
 
+    // set job status
     sigset_t mask_all, prev;
-
     Sigfillset(&mask_all);
     Sigprocmask(SIG_BLOCK, &mask_all, &prev);
     job->state = strcmp(argv[0], "fg") == 0 ? FG : BG;
     Sigprocmask(SIG_SETMASK, &prev, NULL);
 
+    // send SIGCONT to process group 
     Kill(-job->pid, SIGCONT);
 
     if (job->state == BG)
@@ -436,19 +440,22 @@ void sigchld_handler(int sig)
     {
         if (WIFSIGNALED(status))
         {
+            // deal with unexpected exit for child process
             sprintf(buffer, "Job [%d] (%d) terminated by signal %d\n", pid2jid(pid), pid, WTERMSIG(status));
-            sio_puts(buffer);
+            Sio_puts(buffer);
         }
         else if (WIFSTOPPED(status))
         {
+            // set stop state for child
             Sigprocmask(SIG_BLOCK, &mask_all, &prev);
             getjobpid(jobs, pid)->state = ST;
             Sigprocmask(SIG_SETMASK, &prev, NULL);
 
             sprintf(buffer, "Job [%d] (%d) stopped by signal %d\n", pid2jid(pid), pid, WSTOPSIG(status));
-            sio_puts(buffer);
+            Sio_puts(buffer);
         }
 
+        // delete job either exit normally or not
         if (WIFSIGNALED(status) || WIFEXITED(status))
         {
             Sigprocmask(SIG_BLOCK, &mask_all, &prev);
@@ -472,12 +479,16 @@ void sigint_handler(int sig)
     sigset_t mask_all, prev;
     pid_t pid;
 
+    // send sigint to progress group
     Sigfillset(&mask_all);
     Sigprocmask(SIG_BLOCK, &mask_all, &prev);
     pid = fgpid(jobs);
     Sigprocmask(SIG_SETMASK, &prev, NULL);
 
-    Kill(-pid, SIGINT);
+    if (pid != 0)
+    {
+        Kill(-pid, SIGTSTP);
+    }
 
     errno = old_errno;
     return;
@@ -728,9 +739,18 @@ ssize_t sio_puts(char s[]) /* Put string */
     return write(STDOUT_FILENO, s, sio_strlen(s)); //line:csapp:siostrlen
 }
 
+ssize_t Sio_puts(char s[])
+{
+    ssize_t n;
+  
+    if ((n = sio_puts(s)) < 0)
+	sio_error("Sio_puts error");
+    return n;
+}
+
 void sio_error(char s[]) /* Put error message and exit */
 {
-    sio_puts(s);
+    Sio_puts(s);
     _exit(1); //line:csapp:sioexit
 }
 

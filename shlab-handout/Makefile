@@ -7,7 +7,7 @@ DRIVER = ./sdriver.pl
 TSH = ./tsh
 TSHREF = ./tshref
 TSHARGS = "-p"
-CC = gcc
+CC = gcc -g
 CFLAGS = -Wall -O2
 FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint
 
