@@ -206,7 +206,11 @@ void eval(char *cmdline)
         {
             Setpgid(0, 0);
             Sigprocmask(SIG_SETMASK, &prev, NULL);
-            Execve(argv[0], argv, NULL);
+            if (execve(argv[0], argv, NULL) < 0)
+            {
+                fprintf(stdout, "%s: Command not found\n", argv[0]);
+                exit(1);
+            }
         }
 
         int jid = 0;
@@ -370,7 +374,7 @@ void do_bgfg(char **argv)
     Sigprocmask(SIG_SETMASK, &prev, NULL);
 
     Kill(-job->pid, SIGCONT);
-    
+
     if (job->state == BG)
     {
         printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
@@ -380,7 +384,6 @@ void do_bgfg(char **argv)
         waitfg(job->pid);
     }
 
-    
     return;
 }
 
@@ -785,7 +788,7 @@ void Sigdelset(sigset_t *set, int signum)
 void Execve(const char *filename, char *const argv[], char *const envp[])
 {
     if (execve(filename, argv, envp) < 0)
-        unix_error("Execve error");
+        unix_error(argv[0]);
 }
 
 pid_t Fork(void)
