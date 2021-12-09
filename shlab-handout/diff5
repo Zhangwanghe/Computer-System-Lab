@@ -1,0 +1,14 @@
+5c5
+< [1] (693752) ./myspin 2 &
+---
+> [1] (693759) ./myspin 2 &
+7c7
+< [2] (693754) ./myspin 3 &
+---
+> [2] (693761) ./myspin 3 &
+9,10c9,10
+< [1] (693752) Running ./myspin 2 &
+< [2] (693754) Running ./myspin 3 &
+---
+> [1] (693759) Running ./myspin 2 &
+> [2] (693761) Running ./myspin 3 &

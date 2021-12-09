@@ -1,0 +1,22 @@
+5c5
+< [1] (664505) ./myspin 4 &
+---
+> [1] (664518) ./myspin 4 &
+7c7
+< Job [2] (664507) stopped by signal 20
+---
+> Job [2] (664520) stopped by signal 20
+9,10c9,10
+< [1] (664505) Running ./myspin 4 &
+< [2] (664507) Stopped ./myspin 5 
+---
+> [1] (664518) Running ./myspin 4 &
+> [2] (664520) Stopped ./myspin 5 
+11a12
+> [2] (664520) ./myspin 5 
+13,14c14,15
+< [1] (664505) Running ./myspin 4 &
+< [2] (664507) Stopped ./myspin 5 
+---
+> [1] (664518) Running ./myspin 4 &
+> [2] (664520) Running ./myspin 5 

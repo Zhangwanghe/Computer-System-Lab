@@ -1,0 +1,16 @@
+7c7
+< [1] (693922) ./myspin 4 &
+---
+> [1] (693939) ./myspin 4 &
+23c23
+< Job [1] (693922) stopped by signal 20
+---
+> Job [1] (693939) stopped by signal 20
+27c27
+< [1] (693922) ./myspin 4 &
+---
+> [1] (693939) ./myspin 4 &
+29c29
+< [1] (693922) Running ./myspin 4 &
+---
+> [1] (693939) Running ./myspin 4 &

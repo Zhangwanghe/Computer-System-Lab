@@ -1,0 +1,12 @@
+6c6
+< Job [1] (693997) stopped by signal 20
+---
+> Job [1] (694005) stopped by signal 20
+8c8
+< [1] (693997) Stopped ./mystop 2
+---
+> [1] (694005) Stopped ./mystop 2
+10c10
+< Job [2] (694001) terminated by signal 2
+---
+> Job [2] (694008) terminated by signal 2

@@ -1,0 +1,38 @@
+7c7
+< Job [1] (693958) terminated by signal 2
+---
+> Job [1] (693978) terminated by signal 2
+9c9
+< [1] (693962) ./myspin 3 &
+---
+> [1] (693980) ./myspin 3 &
+11c11
+< [2] (693964) ./myspin 4 &
+---
+> [2] (693982) ./myspin 4 &
+13,14c13,14
+< [1] (693962) Running ./myspin 3 &
+< [2] (693964) Running ./myspin 4 &
+---
+> [1] (693980) Running ./myspin 3 &
+> [2] (693982) Running ./myspin 4 &
+16c16
+< Job [1] (693962) stopped by signal 20
+---
+> Job [1] (693980) stopped by signal 20
+18,19c18,19
+< [1] (693962) Stopped ./myspin 3 &
+< [2] (693964) Running ./myspin 4 &
+---
+> [1] (693980) Stopped ./myspin 3 &
+> [2] (693982) Running ./myspin 4 &
+23c23
+< [1] (693962) ./myspin 3 &
+---
+> [1] (693980) ./myspin 3 &
+25,26c25,26
+< [1] (693962) Running ./myspin 3 &
+< [2] (693964) Running ./myspin 4 &
+---
+> [1] (693980) Running ./myspin 3 &
+> [2] (693982) Running ./myspin 4 &

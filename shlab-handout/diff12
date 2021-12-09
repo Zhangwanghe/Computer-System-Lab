@@ -1,0 +1,20 @@
+5c5
+< Job [1] (693875) stopped by signal 20
+---
+> Job [1] (693885) stopped by signal 20
+7c7
+< [1] (693875) Stopped ./mysplit 4 
+---
+> [1] (693885) Stopped ./mysplit 4 
+78,82c78,82
+<  693872 pts/1    S+     0:00 /usr/bin/perl ./sdriver.pl -t trace12.txt -s ./tsh -a -p
+<  693873 pts/1    S+     0:00 ./tsh -p
+<  693875 pts/1    T      0:00 ./mysplit 4
+<  693876 pts/1    T      0:00 ./mysplit 4
+<  693881 pts/1    R      0:00 /bin/ps a
+---
+>  693882 pts/1    S+     0:00 /usr/bin/perl ./sdriver.pl -t trace12.txt -s ./tshref -a -p
+>  693883 pts/1    S+     0:00 ./tshref -p
+>  693885 pts/1    T      0:00 ./mysplit 4
+>  693886 pts/1    T      0:00 ./mysplit 4
+>  693890 pts/1    R      0:00 /bin/ps a
