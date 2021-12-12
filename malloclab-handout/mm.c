@@ -6,8 +6,9 @@
  * footers.  Blocks are never coalesced or reused. Realloc is
  * implemented directly using mm_malloc and mm_free.
  *
- * NOTE TO STUDENTS: Replace this header comment with your own header
- * comment that gives a high level description of your solution.
+ * Wanghe Zhang
+ * 21020897
+ * 
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,11 +25,11 @@
  ********************************************************/
 team_t team = {
     /* Team name */
-    "ateam",
+    "DIY",
     /* First member's full name */
-    "Harry Bovik",
+    "WangheZhang",
     /* First member's email address */
-    "bovik@cs.cmu.edu",
+    "k21020897@kcl.ac.uk",
     /* Second member's full name (leave blank if none) */
     "",
     /* Second member's email address (leave blank if none) */
